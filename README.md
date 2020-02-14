@@ -54,7 +54,7 @@ wait for it to finish provisioning all three vms.
 1. Visit the Jenkins URL (http://jenkins.explorium) using browser and use `Initial Admin Password` to unlock it.  
 2. Install all suggested plugins.
 3. Sign up or continue with admin user.
-4. Click `create new jobs`. Set some name for project, choose `Pipeline`,click `Save`.
+4. Click `create new jobs`. Set some name for project, choose `Pipeline`,click `OK`.
 5. At the bottom from dropdown menu choose `Pipeline script from SCM`. Choose `Git` as SCM.
 6. Paste following github repository url: https://github.com/gothicfann/angular-realworld-example-app.
 7. Save pipeline and run build. Wait for it to finish.
