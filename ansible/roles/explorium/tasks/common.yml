@@ -1,0 +1,49 @@
+---
+
+- copy:
+    src: files/hosts
+    dest: /etc/hosts
+
+- name: configure docker repository
+  yum_repository:
+    name: docker
+    description: docker
+    baseurl: https://download.docker.com/linux/centos/7/$basearch/stable
+    gpgcheck: yes
+    gpgkey: https://download.docker.com/linux/centos/gpg
+
+- name: install docker
+  yum:
+    name: docker-ce
+    state: present
+
+- name: start/enable docker
+  systemd:
+    name: docker
+    state: started
+    enabled: yes
+
+- name: configure docker
+  copy:
+    src: files/daemon.json
+    dest: /etc/docker/daemon.json
+  notify:
+    - restart docker
+
+- name: create ssh dir
+  file:
+    path: /root/.ssh
+    state: directory
+    owner: root
+    group: root
+    mode: 0700
+
+- name: add authorized_keys
+  copy:
+    src: files/authorized_keys
+    dest: /root/.ssh/authorized_keys
+    owner: root
+    group: root
+    mode: 0600
+
+  

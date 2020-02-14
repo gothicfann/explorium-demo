@@ -1,0 +1,4 @@
+127.0.0.1       localhost
+192.168.77.21   app.explorium           app
+192.168.77.22   registry.explorium      registry
+192.168.77.23   jenkins.explorium       jenkins

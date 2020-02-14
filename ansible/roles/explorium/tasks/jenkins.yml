@@ -1,0 +1,71 @@
+---
+
+- name: add id_rsa
+  copy:
+    src: files/id_rsa
+    dest: /root/.ssh/id_rsa
+    owner: root
+    group: root
+    mode: 0600
+
+- name: configure jenkins repository
+  yum_repository:
+    name: jenkins
+    description: jenkins
+    baseurl: http://pkg.jenkins.io/redhat
+    gpgcheck: yes
+    gpgkey: https://jenkins-ci.org/redhat/jenkins-ci.org.key
+
+- name: install java
+  yum:
+    name: java-1.8.0-openjdk
+    state: present
+
+- name: install jenkins
+  yum:
+    name: jenkins-2.204-1.1
+    state: present
+
+- name: start/enable jenkins
+  systemd:
+    name: jenkins
+    state: started
+    enabled: yes
+
+- name: configure jenkins
+  copy:
+    src: files/jenkins
+    dest: /etc/sysconfig/jenkins
+    mode: 0600
+  notify:
+    - restart jenkins
+
+- name: clean jenkins workspace cronjob
+  cron:
+    name: "clean jenkins workspace"
+    minute: "0"
+    hour: "5"
+    job: "rm -rf /var/lib/jenkins/workspace/*"
+
+- name: clean docker cache cronjob
+  cron:
+    name: "clean docker cache"
+    minute: "0"
+    hour: "5"
+    job: "docker system prune -af"
+
+- name: get jenkins initial admin password
+  shell: sleep 20 && cat /var/lib/jenkins/secrets/initialAdminPassword
+  register: initial_admin_password
+
+- name: info
+  debug:
+    msg:
+      - "#########################################################################"
+      - ""
+      - ""
+      - "   JENKINS HAS BEEN DEPLOYED SUCCESSFULLY!"
+      - "     Initial Admin Password: {{ initial_admin_password.stdout }}"
+      - ""
+      - ""
+      - "#########################################################################"

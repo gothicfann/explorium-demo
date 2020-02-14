@@ -1,0 +1,24 @@
+---
+
+- name: install python api for docker
+  yum:
+    name: python-docker-py
+    state: present
+
+- name: create directory for docker registry
+  file:
+    path: /registry
+    state: directory
+    owner: root
+    group: docker
+    mode: 0770
+
+- name: run docker registry as container
+  docker_container:
+    name: registry
+    image: registry
+    restart_policy: always
+    ports:
+      - "80:5000"
+    volumes:
+      - /registry:/var/lib/registry

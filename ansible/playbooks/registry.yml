@@ -1,0 +1,9 @@
+---
+
+- hosts: registry
+  roles:
+    - baselinux
+    - explorium
+  vars:
+    explorium_registry: yes
+  

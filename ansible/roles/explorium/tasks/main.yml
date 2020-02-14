@@ -1,0 +1,9 @@
+---
+
+- import_tasks: common.yml
+
+- import_tasks: registry.yml
+  when: explorium_registry|bool
+
+- import_tasks: jenkins.yml
+  when: explorium_jenkins|bool
